@@ -1,16 +1,22 @@
 package cz.czechitas.webapp.logika;
 
-import java.util.*;
-import org.springframework.stereotype.*;
-import cz.czechitas.webapp.entity.*;
-import cz.czechitas.webapp.persistence.*;
+import cz.czechitas.webapp.entity.HerniPlocha;
+import cz.czechitas.webapp.entity.Karta;
+import cz.czechitas.webapp.entity.StavHry;
+import cz.czechitas.webapp.entity.StavKarty;
+import cz.czechitas.webapp.persistence.JdbcTemplatePexesoRepository;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Component
 public class PexesoService {
 
-    private PexesoRepository ulozisteHer;
+    private JdbcTemplatePexesoRepository ulozisteHer;
 
-    public PexesoService(PexesoRepository ulozisteHer) {
+    public PexesoService(JdbcTemplatePexesoRepository ulozisteHer) {
         this.ulozisteHer = ulozisteHer;
     }
 
