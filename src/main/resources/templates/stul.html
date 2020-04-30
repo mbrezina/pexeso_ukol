@@ -1,43 +1,92 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cs" lang="cs">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="cs"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet"
-          href="css/styles.css"/>
-    <link rel="icon"
-          href="images/favicon.png"/>
+    <meta name="description" content="My lovely web page"/>
+    <meta name="robots" content="index, follow"/>
+    <meta name="keywords" content="java, web"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title>Pexeso</title>
+    <link
+        href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i|Raleway:400,400i,700,700i&amp;subset=latin-ext"
+        rel="stylesheet"/>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="${'css/bootstrap.min.css'}"/>
+
+    <link rel="shortcut icon" href="../static/images/dog_ico" type="image/x-icon" th:href="${'images/dog_ico'}"/>
 </head>
+
 <body>
+<!--/*@thymesVar id="balicekPexesa" type="java.util.List<cz.czechitas.webapp.kartaPexesa>"*/-->
+<!--/*@thymesVar id="linkNaObrazek" type="java.lang.String"*/-->
 
-    <h1>Pexeso</h1>
+<div th:insert="fragments/menu :: menu">menu</div>
 
-    <h2>Tato verze nefunguje. Jde jen o statickou stranku. Nahradte ji sablonou ze sveho ukolu 03</h2>
 
-    <form method="post" class="pexeso">
+<div class="container">
+    <div class="jumbotron">
+        <br>
 
-        <input type="image" src="images/rub.png" name="vybranaKarta0"/>
-        <input type="image" src="images/rub.png" name="vybranaKarta1"/>
-        <input type="image" src="images/rub.png" name="vybranaKarta2"/>
-        <input type="image" src="images/rub.png" name="vybranaKarta3"/>
+        <div class="zprava"
+             th:if="${aktualniHerniPlocha.stav == T(cz.czechitas.webapp.entity.StavHry).KONEC}">
+            <h2>Gratulujeme k výhře!</h2>
 
-        <input type="image" src="images/rub.png" name="vybranaKarta4"/>
-        <input type="image" src="images/rub.png" name="vybranaKarta5"/>
-        <input type="image" src="images/rub.png" name="vybranaKarta6"/>
-        <input type="image" src="images/rub.png" name="vybranaKarta7"/>
+            <a th:href="@{/}" href="stul.html" class="btn btn-info">Začít novou hru</a>
 
-        <input type="image" src="images/rub.png" name="vybranaKarta8"/>
-        <input type="image" src="images/rub.png" name="vybranaKarta9"/>
-        <input type="image" src="images/rub.png" name="vybranaKarta10"/>
-        <input type="image" src="images/rub.png" name="vybranaKarta11"/>
+        </div>
 
-        <input type="image" src="images/rub.png" name="vybranaKarta12"/>
-        <input type="image" src="images/rub.png" name="vybranaKarta13"/>
-        <input type="image" src="images/rub.png" name="vybranaKarta14"/>
-        <input type="image" src="images/rub.png" name="vybranaKarta15"/>
+        <form method="post" class="pexeso">
 
-    </form>
+            <th:block th:each="karta , pocitadlo : ${aktualniHerniPlocha.karticky}" style="display: none;">
+                <input class="karta"
+                       type="image"
+                       th:if="${karta.stav == T(cz.czechitas.webapp.entity.StavKarty).LICEM_NAHORU}"
+                       th:src="${'images/karta' + karta.cisloObrazku + '.jpg'}"
+                       th:name="${'vybranaKarta' + pocitadlo.index}"/>
+                <input class="karta"
+                       type="image"
+                       th:if="${karta.stav == T(cz.czechitas.webapp.entity.StavKarty).RUBEM_NAHORU}"
+                       th:src="${'images/rub.jpg'}"
+                       th:name="${'vybranaKarta' + pocitadlo.index}"/>
+                <img class="karta bez-karty"
+                     th:if="${karta.stav == T(cz.czechitas.webapp.entity.StavKarty).ODEBRANA}"
+                     th:src="${'images/empty.png'}"/>
+            </th:block>
 
+            <!--/* Following block is removed by ThymeLeaf -->
+            <input class="karta" type="image" src="../static/images/karta1.jpg" name="vybranaKarta0"/>
+            <input class="karta" type="image" src="../static/images/karta1.jpg" name="vybranaKarta1"/>
+            <input class="karta" type="image" src="../static/images/karta2.jpg" name="vybranaKarta2"/>
+            <input class="karta" type="image" src="../static/images/karta2.jpg" name="vybranaKarta3"/>
+
+            <input class="karta" type="image" src="../static/images/rub.png" name="vybranaKarta4"/>
+            <input class="karta" type="image" src="../static/images/rub.png" name="vybranaKarta5"/>
+            <input class="karta" type="image" src="../static/images/karta4.jpg" name="vybranaKarta6"/>
+            <input class="karta" type="image" src="../static/images/karta4.jpg" name="vybranaKarta7"/>
+
+            <input class="karta" type="image" src="../static/images/rub.png" name="vybranaKarta8"/>
+            <input class="karta" type="image" src="../static/images/rub.png" name="vybranaKarta9"/>
+            <img class="karta bez-karty" src="../static/images/empty.png"/>
+            <img class="karta bez-karty" src="../static/images/empty.png"/>
+
+            <input class="karta" type="image" src="../static/images/karta6.jpg" name="vybranaKarta12"/>
+            <input class="karta" type="image" src="../static/images/karta6.jpg" name="vybranaKarta13"/>
+            <input class="karta" type="image" src="../static/images/karta7.jpg" name="vybranaKarta14"/>
+            <input class="karta" type="image" src="../static/images/karta7.jpg" name="vybranaKarta15"/>
+            <!--*/-->
+
+        </form>
+
+        <footer class="paticka">
+            <br>
+            <div>
+                <p th:insert="fragments/footer :: footer">Footer</p>
+            </div>
+
+        </footer>
+    </div>
+</div>
 </body>
 </html>
