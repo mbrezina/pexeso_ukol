@@ -4,7 +4,7 @@ import cz.czechitas.webapp.entity.HerniPlocha;
 import cz.czechitas.webapp.entity.Karta;
 import cz.czechitas.webapp.entity.StavHry;
 import cz.czechitas.webapp.entity.StavKarty;
-import cz.czechitas.webapp.persistence.JdbcTemplatePexesoRepository;
+import cz.czechitas.webapp.persistence.InMemoryPexesoRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -14,9 +14,9 @@ import java.util.List;
 @Component
 public class PexesoService {
 
-    private JdbcTemplatePexesoRepository ulozisteHer;
+    private InMemoryPexesoRepository ulozisteHer;
 
-    public PexesoService(JdbcTemplatePexesoRepository ulozisteHer) {
+    public PexesoService(InMemoryPexesoRepository ulozisteHer) {
         this.ulozisteHer = ulozisteHer;
     }
 

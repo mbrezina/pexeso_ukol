@@ -12307,6 +12307,7 @@ table.center {
     margin-right: auto;
     display: grid;
     grid-template-columns: repeat(4, 150px);
+    grid-template-rows: repeat(4, 150px);
     grid-gap: 20px;
 }
 

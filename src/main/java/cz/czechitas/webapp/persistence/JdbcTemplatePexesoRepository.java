@@ -9,7 +9,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.datasource.lookup.DataSourceLookupFailureException;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,7 +18,7 @@ import java.time.Instant;
 import java.util.List;
 
 
-@Repository
+//@Repository
 public class JdbcTemplatePexesoRepository implements PexesoRepository {
 
     private RowMapper<HerniPlocha> prevodnikPlochy;
