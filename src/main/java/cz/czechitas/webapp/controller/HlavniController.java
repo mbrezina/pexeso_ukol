@@ -1,7 +1,9 @@
 package cz.czechitas.webapp.controller;
 
 import cz.czechitas.webapp.entity.HerniPlocha;
+import cz.czechitas.webapp.entity.JmenoForm;
 import cz.czechitas.webapp.entity.NejlepsiHrac;
+import cz.czechitas.webapp.entity.StavHry;
 import cz.czechitas.webapp.logika.PexesoService;
 import cz.czechitas.webapp.persistence.NeexistujiciHraException;
 import org.springframework.stereotype.Controller;
@@ -13,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,7 +22,7 @@ import java.util.regex.Pattern;
 public class HlavniController {
 
     private PexesoService pexesoService;
-    private Map<Long, NejlepsiHrac> seznamNejlepsichHracu;
+
     public HlavniController(PexesoService pexesoService) {
         this.pexesoService = pexesoService;
     }
@@ -37,27 +38,46 @@ public class HlavniController {
         HerniPlocha herniPlocha = pexesoService.najdiHerniPlochu(id);
         ModelAndView drzakNaData = new ModelAndView("stul");
         drzakNaData.addObject("aktualniHerniPlocha", herniPlocha);
-
-        seznamNejlepsichHracu = new TreeMap<>();
-        seznamNejlepsichHracu.put(1L, new NejlepsiHrac("Jana Novotná", 14));
-        seznamNejlepsichHracu.put(2L, new NejlepsiHrac("Marta Jasná", 19));
-        seznamNejlepsichHracu.put(3L, new NejlepsiHrac("Miloš Říha", 20));
-        seznamNejlepsichHracu.put(4L, new NejlepsiHrac("Jarda Vomáčka", 24));
-        seznamNejlepsichHracu.put(5L, new NejlepsiHrac("Jiří Straka", 27));
-
-        drzakNaData.addObject("nejlepsiHraci", seznamNejlepsichHracu.values());
         return drzakNaData;
     }
 
     @RequestMapping(value = "/stul.html", method = RequestMethod.POST)
     public String zpracujTah(@RequestParam("id") Long idHerniPlochy,
                              @RequestParam Map<String, String> allParams) {
+        HerniPlocha herniPlocha = pexesoService.najdiHerniPlochu(idHerniPlochy);
         int cisloVybraneKarty = zjistiPoziciVybraneKarty(allParams.keySet());
         if (cisloVybraneKarty != -1) {
-                pexesoService.provedTah(idHerniPlochy, cisloVybraneKarty);
+            pexesoService.provedTah(idHerniPlochy, cisloVybraneKarty);
+        }
+        if (herniPlocha.getStav().equals(StavHry.KONEC)) {
+            return "redirect:/tabulka.html?id=" + idHerniPlochy;
         }
         return "redirect:/stul.html?id=" + idHerniPlochy;
     }
+
+    @RequestMapping(value = "/tabulka.html", method = RequestMethod.GET)
+    public ModelAndView zobrazTabulku(@RequestParam("id") Long idHerniPlochy) {
+        HerniPlocha herniPlocha = pexesoService.najdiHerniPlochu(idHerniPlochy);
+        ModelAndView drzakNaData = new ModelAndView("tabulka");
+        drzakNaData.addObject("aktualniHerniPlocha", herniPlocha);
+        drzakNaData.addObject("nejlepsiHraci", pexesoService.getSeznamNejlepsichHracu().values());
+        return drzakNaData;
+    }
+
+    @RequestMapping(value = "/tabulka.html", method = RequestMethod.POST)
+    public ModelAndView zpracujTabulku(JmenoForm vstup,
+                                    @RequestParam("id") Long idHerniPlochy) {
+        ModelAndView data = new ModelAndView("tabulka");
+        HerniPlocha herniPlocha = pexesoService.najdiHerniPlochu(idHerniPlochy);
+        String jmenoHrace = vstup.getJmeno();
+        Map<Long, NejlepsiHrac> seznamHracu = pexesoService.getSeznamNejlepsichHracu();
+        //seznamHracu.put(<)
+
+        return data;
+    }
+
+
+
 
     private int zjistiPoziciVybraneKarty(Collection<String> parameterNames) {
         Pattern regex = Pattern.compile("vybranaKarta(\\d+).+");

@@ -1,21 +1,18 @@
 package cz.czechitas.webapp.logika;
 
-import cz.czechitas.webapp.entity.HerniPlocha;
-import cz.czechitas.webapp.entity.Karta;
-import cz.czechitas.webapp.entity.StavHry;
-import cz.czechitas.webapp.entity.StavKarty;
+import cz.czechitas.webapp.entity.*;
 import cz.czechitas.webapp.persistence.InMemoryPexesoRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class PexesoService {
 
     private InMemoryPexesoRepository ulozisteHer;
-
     public PexesoService(InMemoryPexesoRepository ulozisteHer) {
         this.ulozisteHer = ulozisteHer;
     }
@@ -33,6 +30,10 @@ public class PexesoService {
         HerniPlocha novaPlocha = new HerniPlocha(karticky, StavHry.HRAC1_VYBER_PRVNI_KARTY);
         novaPlocha = ulozisteHer.save(novaPlocha);
         return novaPlocha;
+    }
+
+    public Map<Long, NejlepsiHrac> getSeznamNejlepsichHracu() {
+        return ulozisteHer.getSeznamNejlepsichHracu();
     }
 
     private Karta vytvorKartu(int cisloKarty) {
@@ -77,7 +78,6 @@ public class PexesoService {
         if (karticka.getStav() == StavKarty.RUBEM_NAHORU) {
             karticka.setStav(StavKarty.LICEM_NAHORU);
             aktualniPlocha.setStav(StavHry.HRAC1_ZOBRAZENI_VYHODNOCENI);
-
         }
     }
 
@@ -108,6 +108,7 @@ public class PexesoService {
 
     private boolean jeKonecHry(List<Karta> karticky) {
         boolean jeKonec = true;
+        //vykomentováno pro testování:
         //for (Karta karta : karticky) {
         //    if (karta.getStav() != StavKarty.ODEBRANA) {
         //        jeKonec = false;
