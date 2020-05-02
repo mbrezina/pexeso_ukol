@@ -1,13 +1,14 @@
 package cz.czechitas.webapp.entity;
 
-import java.time.*;
-import java.util.*;
+import java.util.List;
 
 public class HerniPlocha {
 
     private Long id;
     private StavHry stav;
     private List<Karta> karticky;
+    private Integer pocetTahu;
+
 
     public HerniPlocha() {
     }
@@ -15,6 +16,19 @@ public class HerniPlocha {
     public HerniPlocha(List<Karta> karticky, StavHry stav) {
         this.karticky = karticky;
         this.stav = stav;
+        this.pocetTahu = 0;
+    }
+
+    public void pripoctiTah() {
+        pocetTahu++;
+    }
+
+    public void setPocetTahu(Integer pocetTahu) {
+        this.pocetTahu = pocetTahu;
+    }
+
+    public Integer getPocetTahu() {
+        return pocetTahu;
     }
 
     public Long getId() {

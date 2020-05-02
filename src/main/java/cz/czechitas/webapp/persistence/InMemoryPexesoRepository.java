@@ -15,10 +15,12 @@ public class InMemoryPexesoRepository implements PexesoRepository {
     private Random random;
     private Map<Long, HerniPlocha> seznamHernichPloch;
 
+
     public InMemoryPexesoRepository() {
         random = new Random();
         seznamHernichPloch = new HashMap<>();
     }
+
 
     public HerniPlocha findById(Long id) {
         HerniPlocha herniPlocha = seznamHernichPloch.get(id);
@@ -40,6 +42,6 @@ public class InMemoryPexesoRepository implements PexesoRepository {
     }
 
     private Long vygenerujNahodneId() {
-        return (long)Math.abs(random.nextInt());
+        return (long) Math.abs(random.nextInt());
     }
 }

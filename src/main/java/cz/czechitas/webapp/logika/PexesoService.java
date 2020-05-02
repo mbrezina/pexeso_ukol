@@ -51,9 +51,9 @@ public class PexesoService {
             vyberPrvniKartu(poziceKartyNaKterouSeKliknulo, aktualniPlocha);
         } else if (aktualniPlocha.getStav() == StavHry.HRAC1_VYBER_DRUHE_KARTY) {
             vyberDruhouKartu(poziceKartyNaKterouSeKliknulo, aktualniPlocha);
+            aktualniPlocha.pripoctiTah();
         } else if (aktualniPlocha.getStav() == StavHry.HRAC1_ZOBRAZENI_VYHODNOCENI) {
             List<Karta> karticky = vyhodnotOtoceneKarticky(aktualniPlocha);
-
             if (!jeKonecHry(karticky)) {
                 aktualniPlocha.setStav(StavHry.HRAC1_VYBER_PRVNI_KARTY);
             } else {
@@ -108,11 +108,11 @@ public class PexesoService {
 
     private boolean jeKonecHry(List<Karta> karticky) {
         boolean jeKonec = true;
-        for (Karta karta : karticky) {
-            if (karta.getStav() != StavKarty.ODEBRANA) {
-                jeKonec = false;
-            }
-        }
+        //for (Karta karta : karticky) {
+        //    if (karta.getStav() != StavKarty.ODEBRANA) {
+        //        jeKonec = false;
+         //   }
+        //}
         return jeKonec;
     }
 }

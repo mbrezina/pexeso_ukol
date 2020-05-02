@@ -32,8 +32,33 @@
         <div class="zprava"
              th:if="${aktualniHerniPlocha.stav == T(cz.czechitas.webapp.entity.StavHry).KONEC}">
             <h2>Gratulujeme k výhře!</h2>
+            <h4>Potřebovali jste k výhře <span th:text="${aktualniHerniPlocha.pocetTahu}">10</span> tahů.</h4>
 
-            <a th:href="@{/}" href="stul.html" class="btn btn-info">Začít novou hru</a>
+            <table class="table">
+                <tr>
+                    <th class="table-primary">Pořadí</th>
+                    <td class="table-primary">Jméno</td>
+                    <td class="table-primary">Počet tahů nutných pro výhru</td>
+                </tr>
+
+                <tr th:each="jedenHrac : ${nejlepsiHraci}">
+                    <td th:text="${jedenHracStat.count}"></td>
+                    <td th:text="${jedenHrac.jmeno}"></td>
+                    <td th:text="${jedenHrac.tahyNaVyhru}"></td>
+                </tr>
+            </table>
+
+            <form>
+                <div class="form-group">
+                    <label for="inputName">Zapište své jméno do tabulky nejlepších!</label>
+                    <input class="form-control" id="inputName" aria-describedby="emailHelp"
+                           placeholder="Jméno" name="jmeno">
+                    <small id="emailHelp" class="form-text text-muted">Bez jména se formulář neodešle</small>
+                </div>
+                <a th:href="@{/}" href="stul.html" type="submit" class="btn btn-info">Uložit jméno</a>
+            </form>
+
+            <a th:href="@{/}" href="stul.html" class="btn btn-success">Začít novou hru</a>
 
         </div>
 
@@ -61,13 +86,13 @@
             <input class="karta" type="image" src="../static/images/karta2.jpg" name="vybranaKarta2"/>
             <input class="karta" type="image" src="../static/images/karta2.jpg" name="vybranaKarta3"/>
 
-            <input class="karta" type="image" src="../static/images/rub.png" name="vybranaKarta4"/>
-            <input class="karta" type="image" src="../static/images/rub.png" name="vybranaKarta5"/>
+            <input class="karta" type="image" src="../static/images/rub.jpg" name="vybranaKarta4"/>
+            <input class="karta" type="image" src="../static/images/rub.jpg" name="vybranaKarta5"/>
             <input class="karta" type="image" src="../static/images/karta4.jpg" name="vybranaKarta6"/>
             <input class="karta" type="image" src="../static/images/karta4.jpg" name="vybranaKarta7"/>
 
-            <input class="karta" type="image" src="../static/images/rub.png" name="vybranaKarta8"/>
-            <input class="karta" type="image" src="../static/images/rub.png" name="vybranaKarta9"/>
+            <input class="karta" type="image" src="../static/images/rub.jpg" name="vybranaKarta8"/>
+            <input class="karta" type="image" src="../static/images/rub.jpg" name="vybranaKarta9"/>
             <img class="karta bez-karty" src="../static/images/empty.png"/>
             <img class="karta bez-karty" src="../static/images/empty.png"/>
 
