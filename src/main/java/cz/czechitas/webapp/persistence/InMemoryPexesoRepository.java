@@ -3,12 +3,14 @@ package cz.czechitas.webapp.persistence;
 import cz.czechitas.webapp.entity.HerniPlocha;
 import cz.czechitas.webapp.entity.Karta;
 import cz.czechitas.webapp.entity.NejlepsiHrac;
-import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 
-@Repository
+//@Repository
 public class InMemoryPexesoRepository implements PexesoRepository {
 
     private Random random;

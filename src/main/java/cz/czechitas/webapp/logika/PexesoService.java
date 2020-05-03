@@ -2,6 +2,7 @@ package cz.czechitas.webapp.logika;
 
 import cz.czechitas.webapp.entity.*;
 import cz.czechitas.webapp.persistence.InMemoryPexesoRepository;
+import cz.czechitas.webapp.persistence.JdbcTemplatePexesoRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -11,8 +12,8 @@ import java.util.List;
 @Component
 public class PexesoService {
 
-    private InMemoryPexesoRepository ulozisteHer;
-    public PexesoService(InMemoryPexesoRepository ulozisteHer) {
+    private JdbcTemplatePexesoRepository ulozisteHer;
+    public PexesoService(JdbcTemplatePexesoRepository ulozisteHer) {
         this.ulozisteHer = ulozisteHer;
     }
 
