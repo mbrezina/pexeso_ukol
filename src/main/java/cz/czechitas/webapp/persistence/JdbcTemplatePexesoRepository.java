@@ -2,6 +2,7 @@ package cz.czechitas.webapp.persistence;
 
 import cz.czechitas.webapp.entity.HerniPlocha;
 import cz.czechitas.webapp.entity.Karta;
+import cz.czechitas.webapp.entity.NejlepsiHrac;
 import org.mariadb.jdbc.MariaDbDataSource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -9,20 +10,23 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.datasource.lookup.DataSourceLookupFailureException;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 
-//@Repository
+@Repository
 public class JdbcTemplatePexesoRepository implements PexesoRepository {
 
     private RowMapper<HerniPlocha> prevodnikPlochy;
     private RowMapper<Karta> prevodnikKarty;
+    private RowMapper<NejlepsiHrac>prevodnikNejlepsiHrac;
     private JdbcTemplate odesilacDotazu;
 
     public JdbcTemplatePexesoRepository() {
@@ -34,13 +38,13 @@ public class JdbcTemplatePexesoRepository implements PexesoRepository {
 
             prevodnikPlochy = BeanPropertyRowMapper.newInstance(HerniPlocha.class);
             prevodnikKarty = BeanPropertyRowMapper.newInstance(Karta.class);
+            prevodnikNejlepsiHrac = BeanPropertyRowMapper.newInstance(NejlepsiHrac.class);
             odesilacDotazu = new JdbcTemplate(konfiguraceDatabaze);
 
         } catch (SQLException sqle) {
             throw new DataSourceLookupFailureException("Chyba připojení do databáze");
         }
     }
-
 
     @Override
     public HerniPlocha save(HerniPlocha plocha) {
@@ -51,6 +55,12 @@ public class JdbcTemplatePexesoRepository implements PexesoRepository {
             updatuj(plocha);
             return plocha;
         }
+    }
+
+    public ArrayList<NejlepsiHrac> getSeznamNejlepsichHracu() {
+        String sql = "SELECT * FROM NejlepsiHraci";
+        ArrayList<NejlepsiHrac> nejlepsiHraci = (ArrayList<NejlepsiHrac>) odesilacDotazu.query(sql, prevodnikNejlepsiHrac);
+        return nejlepsiHraci;
     }
 
 

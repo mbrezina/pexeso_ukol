@@ -37,11 +37,12 @@ public class HlavniController {
     @RequestMapping(value = "/stul.html", method = RequestMethod.POST)
     public String zpracujTah(@RequestParam("id") Long idHerniPlochy,
                              @RequestParam Map<String, String> allParams) {
-        HerniPlocha herniPlocha = pexesoService.najdiHerniPlochu(idHerniPlochy);
+
         int cisloVybraneKarty = zjistiPoziciVybraneKarty(allParams.keySet());
         if (cisloVybraneKarty != -1) {
             pexesoService.provedTah(idHerniPlochy, cisloVybraneKarty);
         }
+        HerniPlocha herniPlocha = pexesoService.najdiHerniPlochu(idHerniPlochy);
         if (herniPlocha.getStav().equals(StavHry.KONEC)) {
             return "redirect:/tabulka.html?id=" + idHerniPlochy;
         }
