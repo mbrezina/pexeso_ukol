@@ -17,6 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -56,6 +57,21 @@ public class JdbcTemplatePexesoRepository implements PexesoRepository {
             return plocha;
         }
     }
+
+
+    public Collection<NejlepsiHrac> getSeznamNejlepsichHracu() {
+        String sql = "SELECT * FROM NejlepsiHraci";
+        try {
+            List<NejlepsiHrac> hraci = odesilacDotazu.query(sql, prevodnikNejlepsiHrac);
+            return hraci;
+
+        } catch (EmptyResultDataAccessException e) {
+            throw new NeexistujiciHraException();
+        }
+
+        //return seznamNejlepsichHracu;
+    }
+
 
 
     private HerniPlocha pridej(HerniPlocha plocha) {

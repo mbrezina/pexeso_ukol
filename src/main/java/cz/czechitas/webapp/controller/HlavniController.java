@@ -64,7 +64,7 @@ public class HlavniController {
         System.out.println(idHerniPlochy);
         HerniPlocha herniPlocha = pexesoService.najdiHerniPlochu(idHerniPlochy);
         String jmenoHrace = vstup.getJmeno();
-        ArrayList<NejlepsiHrac> seznamHracu = (ArrayList<NejlepsiHrac>) pexesoService.getSeznamNejlepsichHracu();
+        List<NejlepsiHrac> seznamHracu = (List<NejlepsiHrac>) pexesoService.getSeznamNejlepsichHracu();
         seznamHracu.add(new NejlepsiHrac(jmenoHrace, herniPlocha.getPocetTahu()));
 
         Collections.sort(seznamHracu);

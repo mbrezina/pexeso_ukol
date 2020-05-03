@@ -7,6 +7,23 @@ GRANT ALL PRIVILEGES ON *.* TO   'student'@'localhost'   IDENTIFIED BY 'password
 
 
 -- Prihlasit se jako student, heslo password
+
+CREATE TABLE NejlepsiHraci
+(
+    Jmeno VARCHAR(250) NOT NULL,
+    PocetTahu INT NOT NULL
+
+);
+
+INSERT INTO Pexeso.NejlepsiHraci (Jmeno, PocetTahu) VALUES ('Jana Novotná', 14);
+INSERT INTO Pexeso.NejlepsiHraci (Jmeno, PocetTahu) VALUES ('Jan Urban', 15);
+INSERT INTO Pexeso.NejlepsiHraci (Jmeno, PocetTahu) VALUES ('Viki de Jong', 17);
+INSERT INTO Pexeso.NejlepsiHraci (Jmeno, PocetTahu) VALUES ('Karel Burjan', 18);
+INSERT INTO Pexeso.NejlepsiHraci (Jmeno, PocetTahu) VALUES ('Juna Royal Hermelin', 23);
+INSERT INTO Pexeso.NejlepsiHraci (Jmeno, PocetTahu) VALUES ('Máňa Zelená', 16);
+INSERT INTO Pexeso.NejlepsiHraci (Jmeno, PocetTahu) VALUES ('Rosťa Kubát', 19);
+
+
 # DROP DATABASE VideoBoss;
 
 CREATE DATABASE VideoBoss

@@ -1,11 +1,11 @@
 package cz.czechitas.webapp.logika;
 
 import cz.czechitas.webapp.entity.*;
-import cz.czechitas.webapp.persistence.InMemoryPexesoRepository;
 import cz.czechitas.webapp.persistence.JdbcTemplatePexesoRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class PexesoService {
         return novaPlocha;
     }
 
-    public ArrayList<NejlepsiHrac> getSeznamNejlepsichHracu() {
+    public Collection<NejlepsiHrac> getSeznamNejlepsichHracu() {
         return ulozisteHer.getSeznamNejlepsichHracu();
     }
 
@@ -109,11 +109,11 @@ public class PexesoService {
     private boolean jeKonecHry(List<Karta> karticky) {
         boolean jeKonec = true;
 
-        for (Karta karta : karticky) {
-            if (karta.getStav() != StavKarty.ODEBRANA) {
-                jeKonec = false;
-           }
-        }
+        //for (Karta karta : karticky) {
+         //   if (karta.getStav() != StavKarty.ODEBRANA) {
+         //       jeKonec = false;
+         //  }
+        //}
         return jeKonec;
     }
 }
