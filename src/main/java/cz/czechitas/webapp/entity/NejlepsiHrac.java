@@ -1,6 +1,7 @@
 package cz.czechitas.webapp.entity;
 
-public class NejlepsiHrac {
+public class NejlepsiHrac implements Comparable<NejlepsiHrac> {
+
     private String jmeno;
     private int tahyNaVyhru;
 
@@ -24,4 +25,17 @@ public class NejlepsiHrac {
     public int getTahyNaVyhru() {
         return tahyNaVyhru;
     }
+
+    @Override
+    public int compareTo(NejlepsiHrac o) {
+        NejlepsiHrac druhyHrac = (NejlepsiHrac) o;
+        if (this.getTahyNaVyhru() < druhyHrac.getTahyNaVyhru()) {
+            return -1;
+        } else if (this.getTahyNaVyhru() > druhyHrac.getTahyNaVyhru()) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
 }

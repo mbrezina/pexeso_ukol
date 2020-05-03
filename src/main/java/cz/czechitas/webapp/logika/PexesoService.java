@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class PexesoService {
@@ -32,7 +31,7 @@ public class PexesoService {
         return novaPlocha;
     }
 
-    public Map<Long, NejlepsiHrac> getSeznamNejlepsichHracu() {
+    public ArrayList<NejlepsiHrac> getSeznamNejlepsichHracu() {
         return ulozisteHer.getSeznamNejlepsichHracu();
     }
 
@@ -108,12 +107,12 @@ public class PexesoService {
 
     private boolean jeKonecHry(List<Karta> karticky) {
         boolean jeKonec = true;
-        //vykomentováno pro testování:
-        //for (Karta karta : karticky) {
-        //    if (karta.getStav() != StavKarty.ODEBRANA) {
-        //        jeKonec = false;
-         //   }
-        //}
+
+        for (Karta karta : karticky) {
+            if (karta.getStav() != StavKarty.ODEBRANA) {
+                jeKonec = false;
+           }
+        }
         return jeKonec;
     }
 }

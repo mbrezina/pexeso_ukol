@@ -1,20 +1,13 @@
 package cz.czechitas.webapp.controller;
 
-import cz.czechitas.webapp.entity.HerniPlocha;
-import cz.czechitas.webapp.entity.JmenoForm;
-import cz.czechitas.webapp.entity.NejlepsiHrac;
-import cz.czechitas.webapp.entity.StavHry;
+import cz.czechitas.webapp.entity.*;
 import cz.czechitas.webapp.logika.PexesoService;
 import cz.czechitas.webapp.persistence.NeexistujiciHraException;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -60,23 +53,26 @@ public class HlavniController {
         HerniPlocha herniPlocha = pexesoService.najdiHerniPlochu(idHerniPlochy);
         ModelAndView drzakNaData = new ModelAndView("tabulka");
         drzakNaData.addObject("aktualniHerniPlocha", herniPlocha);
-        drzakNaData.addObject("nejlepsiHraci", pexesoService.getSeznamNejlepsichHracu().values());
+        drzakNaData.addObject("nejlepsiHraci", pexesoService.getSeznamNejlepsichHracu());
         return drzakNaData;
     }
 
-    @RequestMapping(value = "/tabulka.html", method = RequestMethod.POST)
-    public ModelAndView zpracujTabulku(JmenoForm vstup,
-                                    @RequestParam("id") Long idHerniPlochy) {
-        ModelAndView data = new ModelAndView("tabulka");
+    @RequestMapping(value = "/tabulka/{id}.html", method = RequestMethod.POST)
+    public ModelAndView zpracujTabulku(@PathVariable("id") Long idHerniPlochy,
+                                       JmenoForm vstup) {
+        ModelAndView drzakNaData = new ModelAndView("vysledek");
+        System.out.println(idHerniPlochy);
         HerniPlocha herniPlocha = pexesoService.najdiHerniPlochu(idHerniPlochy);
         String jmenoHrace = vstup.getJmeno();
-        Map<Long, NejlepsiHrac> seznamHracu = pexesoService.getSeznamNejlepsichHracu();
-        //seznamHracu.put(<)
+        ArrayList<NejlepsiHrac> seznamHracu = (ArrayList<NejlepsiHrac>) pexesoService.getSeznamNejlepsichHracu();
+        seznamHracu.add(new NejlepsiHrac(jmenoHrace, herniPlocha.getPocetTahu()));
 
-        return data;
+        Collections.sort(seznamHracu);
+
+        drzakNaData.addObject("nejlepsiHraci", seznamHracu);
+        drzakNaData.addObject("aktualniHerniPlocha", herniPlocha);
+        return drzakNaData;
     }
-
-
 
 
     private int zjistiPoziciVybraneKarty(Collection<String> parameterNames) {

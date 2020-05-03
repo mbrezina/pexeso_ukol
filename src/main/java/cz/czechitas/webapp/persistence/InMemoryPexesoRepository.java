@@ -5,10 +5,7 @@ import cz.czechitas.webapp.entity.Karta;
 import cz.czechitas.webapp.entity.NejlepsiHrac;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.TreeMap;
+import java.util.*;
 
 
 @Repository
@@ -16,21 +13,21 @@ public class InMemoryPexesoRepository implements PexesoRepository {
 
     private Random random;
     private Map<Long, HerniPlocha> seznamHernichPloch;
-    private Map<Long, NejlepsiHrac> seznamNejlepsichHracu;
+    private ArrayList<NejlepsiHrac> seznamNejlepsichHracu;
 
 
     public InMemoryPexesoRepository() {
         random = new Random();
         seznamHernichPloch = new HashMap<>();
-        seznamNejlepsichHracu = new TreeMap<>();
-        seznamNejlepsichHracu.put(1L, new NejlepsiHrac("Jana Novotná", 14));
-        seznamNejlepsichHracu.put(2L, new NejlepsiHrac("Marta Jasná", 19));
-        seznamNejlepsichHracu.put(3L, new NejlepsiHrac("Miloš Říha", 20));
-        seznamNejlepsichHracu.put(4L, new NejlepsiHrac("Jarda Vomáčka", 24));
-        seznamNejlepsichHracu.put(5L, new NejlepsiHrac("Jiří Straka", 27));
+        seznamNejlepsichHracu = new ArrayList<>();
+        seznamNejlepsichHracu.add(new NejlepsiHrac("Jana Novotná", 14));
+        seznamNejlepsichHracu.add(new NejlepsiHrac("Marta Jasná", 19));
+        seznamNejlepsichHracu.add(new NejlepsiHrac("Miloš Říha", 20));
+        seznamNejlepsichHracu.add(new NejlepsiHrac("Jarda Vomáčka", 24));
+        seznamNejlepsichHracu.add(new NejlepsiHrac("Jiří Straka", 27));
     }
 
-    public Map<Long, NejlepsiHrac> getSeznamNejlepsichHracu() {
+    public ArrayList<NejlepsiHrac> getSeznamNejlepsichHracu() {
         return seznamNejlepsichHracu;
     }
 
