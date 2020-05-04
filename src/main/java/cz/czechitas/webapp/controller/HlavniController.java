@@ -1,13 +1,21 @@
 package cz.czechitas.webapp.controller;
 
-import java.util.*;
-import java.util.regex.*;
-import org.springframework.stereotype.*;
+import cz.czechitas.webapp.entity.HerniPlocha;
+import cz.czechitas.webapp.entity.JmenoForm;
+import cz.czechitas.webapp.entity.NejlepsiHrac;
+import cz.czechitas.webapp.entity.StavHry;
+import cz.czechitas.webapp.logika.PexesoService;
+import cz.czechitas.webapp.persistence.NeexistujiciHraException;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.*;
-import cz.czechitas.webapp.entity.*;
-import cz.czechitas.webapp.logika.*;
-import cz.czechitas.webapp.persistence.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 public class HlavniController {
@@ -35,11 +43,43 @@ public class HlavniController {
     @RequestMapping(value = "/stul.html", method = RequestMethod.POST)
     public String zpracujTah(@RequestParam("id") Long idHerniPlochy,
                              @RequestParam Map<String, String> allParams) {
+
         int cisloVybraneKarty = zjistiPoziciVybraneKarty(allParams.keySet());
         if (cisloVybraneKarty != -1) {
-                pexesoService.provedTah(idHerniPlochy, cisloVybraneKarty);
+            pexesoService.provedTah(idHerniPlochy, cisloVybraneKarty);
+        }
+        HerniPlocha herniPlocha = pexesoService.najdiHerniPlochu(idHerniPlochy);
+        if (herniPlocha.getStav().equals(StavHry.KONEC)) {
+            return "redirect:/tabulka.html?id=" + idHerniPlochy;
         }
         return "redirect:/stul.html?id=" + idHerniPlochy;
+    }
+
+    @RequestMapping(value = "/tabulka.html", method = RequestMethod.GET)
+    public ModelAndView zobrazTabulku(@RequestParam("id") Long idHerniPlochy) {
+        HerniPlocha herniPlocha = pexesoService.najdiHerniPlochu(idHerniPlochy);
+        ModelAndView drzakNaData = new ModelAndView("tabulka");
+        drzakNaData.addObject("aktualniHerniPlocha", herniPlocha);
+        drzakNaData.addObject("nejlepsiHraci", pexesoService.getSeznamNejlepsichHracu());
+        return drzakNaData;
+    }
+
+    @RequestMapping(value = "/tabulka/{id}.html", method = RequestMethod.POST)
+    public ModelAndView zpracujTabulku(@PathVariable("id") Long idHerniPlochy,
+                                       JmenoForm vstup) {
+        ModelAndView drzakNaData = new ModelAndView("vysledek");
+        System.out.println(idHerniPlochy);
+        HerniPlocha herniPlocha = pexesoService.najdiHerniPlochu(idHerniPlochy);
+        String jmenoHrace = vstup.getJmeno();
+        ArrayList<NejlepsiHrac> seznamHracu = (ArrayList<NejlepsiHrac>) pexesoService.getSeznamNejlepsichHracu();
+        pexesoService.updatujHrace(jmenoHrace, herniPlocha.getPocetTahu());
+
+
+        seznamHracu.add(new NejlepsiHrac(jmenoHrace, herniPlocha.getPocetTahu()));
+        Collections.sort(seznamHracu);
+        drzakNaData.addObject("nejlepsiHraci", seznamHracu);
+        drzakNaData.addObject("aktualniHerniPlocha", herniPlocha);
+        return drzakNaData;
     }
 
     private int zjistiPoziciVybraneKarty(Collection<String> parameterNames) {

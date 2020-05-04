@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="cs"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="My lovely web page"/>
+    <meta name="robots" content="index, follow"/>
+    <meta name="keywords" content="java, web"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Pexeso</title>
+    <link
+        href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i|Raleway:400,400i,700,700i&amp;subset=latin-ext"
+        rel="stylesheet"/>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{'css/bootstrap.min.css'}"/>
+
+    <link rel="shortcut icon" href="../static/images/dog_ico" type="image/x-icon" th:href="@{'images/dog_ico'}"/>
+</head>
+
+<body>
+<!--/*@thymesVar id="balicekPexesa" type="java.util.List<cz.czechitas.webapp.kartaPexesa>"*/-->
+<!--/*@thymesVar id="linkNaObrazek" type="java.lang.String"*/-->
+<!--/*@thymesVar id="TahyNaVyhru" type="java.lang.Integer"*/-->
+<!--/*@thymesVar id="jmeno" type="java.lang.String"*/-->
+
+
+<div th:insert="fragments/menu :: menu">menu</div>
+
+
+<div class="container">
+    <div class="jumbotron">
+        <br>
+        <h2>Gratulujeme k výhře!</h2>
+        <h4>Potřebovali jste k výhře <span th:text="${aktualniHerniPlocha.pocetTahu}">10</span> tahů.</h4>
+
+        <div>
+            <br>
+            <table class="table">
+                <tr>
+                    <th class="table-primary">Pořadí</th>
+                    <td class="table-primary">Jméno</td>
+                    <td class="table-primary">Počet tahů nutných pro výhru</td>
+                </tr>
+                <tr th:each="jedenHrac : ${nejlepsiHraci}">
+                    <td th:text="${jedenHracStat.count}"></td>
+                    <td th:text="${jedenHrac.jmeno}"></td>
+                    <td th:text="${jedenHrac.PocetTahu}"></td>
+                </tr>
+            </table>
+
+            <form th:action="'tabulka/' + ${aktualniHerniPlocha.id} + '.html'" method="post">
+
+                <div class="form-group">
+                    <label for="inputName">Zapište své jméno do tabulky nejlepších!</label>
+                    <input class="form-control" id="inputName" aria-describedby="emailHelp"
+                           placeholder="Jméno" name="jmeno">
+                    <small id="emailHelp" class="form-text text-muted">Bez jména se formulář neodešle</small>
+                </div>
+                <input type="submit" class="btn btn-info" value="Uložit jméno"/>
+
+            </form>
+
+        </div>
+
+        <footer class="paticka">
+            <br>
+            <div>
+                <p th:insert="fragments/footer :: footer">Footer</p>
+            </div>
+
+        </footer>
+    </div>
+</div>
+</body>
+</html>

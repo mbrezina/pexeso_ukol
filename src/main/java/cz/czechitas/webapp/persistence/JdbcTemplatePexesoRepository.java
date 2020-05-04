@@ -2,6 +2,7 @@ package cz.czechitas.webapp.persistence;
 
 import cz.czechitas.webapp.entity.HerniPlocha;
 import cz.czechitas.webapp.entity.Karta;
+import cz.czechitas.webapp.entity.NejlepsiHrac;
 import org.mariadb.jdbc.MariaDbDataSource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -16,6 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,6 +26,7 @@ public class JdbcTemplatePexesoRepository implements PexesoRepository {
 
     private RowMapper<HerniPlocha> prevodnikPlochy;
     private RowMapper<Karta> prevodnikKarty;
+    private RowMapper<NejlepsiHrac>prevodnikNejlepsiHrac;
     private JdbcTemplate odesilacDotazu;
 
     public JdbcTemplatePexesoRepository() {
@@ -35,11 +38,19 @@ public class JdbcTemplatePexesoRepository implements PexesoRepository {
 
             prevodnikPlochy = BeanPropertyRowMapper.newInstance(HerniPlocha.class);
             prevodnikKarty = BeanPropertyRowMapper.newInstance(Karta.class);
+            prevodnikNejlepsiHrac = BeanPropertyRowMapper.newInstance(NejlepsiHrac.class);
             odesilacDotazu = new JdbcTemplate(konfiguraceDatabaze);
 
         } catch (SQLException sqle) {
             throw new DataSourceLookupFailureException("Chyba připojení do databáze");
         }
+    }
+
+
+    public ArrayList<NejlepsiHrac> getSeznamNejlepsichHracu() {
+        String sql = "SELECT * FROM NejlepsiHraci";
+        ArrayList<NejlepsiHrac> nejlepsiHraci = (ArrayList<NejlepsiHrac>) odesilacDotazu.query(sql, prevodnikNejlepsiHrac);
+        return nejlepsiHraci;
     }
 
 
@@ -57,12 +68,13 @@ public class JdbcTemplatePexesoRepository implements PexesoRepository {
 
     private HerniPlocha pridej(HerniPlocha plocha) {
         GeneratedKeyHolder drzakNaVygenerovanyKlic = new GeneratedKeyHolder();
-        String sql = "INSERT INTO HerniPlochy (Stav, CasPoslednihoTahu) " +
-            "VALUES (?, ?)";
+        String sql = "INSERT INTO HerniPlochy (Stav, CasPoslednihoTahu, PocetTahu) " +
+            "VALUES (?, ?, ?)";
         odesilacDotazu.update((Connection con) -> {
                 PreparedStatement prikaz = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 prikaz.setString(1, plocha.getStav().name());
                 prikaz.setObject(2, Instant.now());
+                prikaz.setInt(3, plocha.getPocetTahu());
                 return prikaz;
             },
             drzakNaVygenerovanyKlic);
@@ -75,6 +87,11 @@ public class JdbcTemplatePexesoRepository implements PexesoRepository {
         }
         return plocha;
     }
+
+   /* private void zvysPocetTahu(Long plochaId) {
+
+    }*/
+
 
     private void pridejKarticku(Karta karticka, Long plochaId, int poradiKarty) {
         GeneratedKeyHolder drzakNaVygenerovanyKlic = new GeneratedKeyHolder();
@@ -97,7 +114,7 @@ public class JdbcTemplatePexesoRepository implements PexesoRepository {
     public HerniPlocha findById(Long id) {
         try {
             HerniPlocha herniPlocha = odesilacDotazu.queryForObject(
-                "SELECT ID, Stav FROM HerniPlochy WHERE ID = ?",
+                "SELECT ID, Stav, PocetTahu FROM HerniPlochy WHERE ID = ?",
                 prevodnikPlochy,
                 id);
             List<Karta> karticky = odesilacDotazu.query(
@@ -111,12 +128,20 @@ public class JdbcTemplatePexesoRepository implements PexesoRepository {
         }
     }
 
+    public void vlozHrace(String jmeno, Integer PocetTahu) {
+        odesilacDotazu.update("INSERT INTO NejlepsiHraci (Jmeno, PocetTahu) VALUES (?, ?)",
+            jmeno,
+            PocetTahu);
+    }
+
+
 
     private HerniPlocha updatuj(HerniPlocha plocha) {
         odesilacDotazu.update(
-            "UPDATE HerniPlochy SET Stav = ?, CasPoslednihoTahu = ? WHERE ID = ?",
+            "UPDATE HerniPlochy SET Stav = ?, CasPoslednihoTahu = ?, PocetTahu = ? WHERE ID = ?",
             plocha.getStav().name(),
             Instant.now(),
+            plocha.getPocetTahu(),
             plocha.getId());
 
         List<Karta> karticky = plocha.getKarticky();

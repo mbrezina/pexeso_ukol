@@ -1,9 +1,6 @@
 package cz.czechitas.webapp.logika;
 
-import cz.czechitas.webapp.entity.HerniPlocha;
-import cz.czechitas.webapp.entity.Karta;
-import cz.czechitas.webapp.entity.StavHry;
-import cz.czechitas.webapp.entity.StavKarty;
+import cz.czechitas.webapp.entity.*;
 import cz.czechitas.webapp.persistence.JdbcTemplatePexesoRepository;
 import org.springframework.stereotype.Component;
 
@@ -30,10 +27,18 @@ public class PexesoService {
             cisloKarty++;
         }
         Collections.shuffle(karticky);
-        HerniPlocha novaPlocha = new HerniPlocha(karticky, StavHry.HRAC1_VYBER_PRVNI_KARTY);
+        HerniPlocha novaPlocha = new HerniPlocha(karticky, StavHry.HRAC1_VYBER_PRVNI_KARTY, 0);
         novaPlocha = ulozisteHer.save(novaPlocha);
         return novaPlocha;
     }
+
+    public ArrayList<NejlepsiHrac> getSeznamNejlepsichHracu() {
+        return ulozisteHer.getSeznamNejlepsichHracu();
+    }
+
+    public void updatujHrace(String jmeno, Integer pocetTahu) {
+        ulozisteHer.vlozHrace(jmeno, pocetTahu);
+        }
 
     private Karta vytvorKartu(int cisloKarty) {
         return new Karta(cisloKarty, StavKarty.RUBEM_NAHORU);
@@ -51,9 +56,9 @@ public class PexesoService {
             vyberPrvniKartu(poziceKartyNaKterouSeKliknulo, aktualniPlocha);
         } else if (aktualniPlocha.getStav() == StavHry.HRAC1_VYBER_DRUHE_KARTY) {
             vyberDruhouKartu(poziceKartyNaKterouSeKliknulo, aktualniPlocha);
+            aktualniPlocha.pripoctiTah();
         } else if (aktualniPlocha.getStav() == StavHry.HRAC1_ZOBRAZENI_VYHODNOCENI) {
             List<Karta> karticky = vyhodnotOtoceneKarticky(aktualniPlocha);
-
             if (!jeKonecHry(karticky)) {
                 aktualniPlocha.setStav(StavHry.HRAC1_VYBER_PRVNI_KARTY);
             } else {
@@ -108,11 +113,11 @@ public class PexesoService {
 
     private boolean jeKonecHry(List<Karta> karticky) {
         boolean jeKonec = true;
-        //for (Karta karta : karticky) {
-        //    if (karta.getStav() != StavKarty.ODEBRANA) {
-        //        jeKonec = false;
-        //    }
-        //}
+        for (Karta karta : karticky) {
+            if (karta.getStav() != StavKarty.ODEBRANA) {
+                jeKonec = false;
+            }
+        }
         return jeKonec;
     }
 }
