@@ -108,11 +108,11 @@ public class PexesoService {
 
     private boolean jeKonecHry(List<Karta> karticky) {
         boolean jeKonec = true;
-        for (Karta karta : karticky) {
-            if (karta.getStav() != StavKarty.ODEBRANA) {
-                jeKonec = false;
-            }
-        }
+        //for (Karta karta : karticky) {
+        //    if (karta.getStav() != StavKarty.ODEBRANA) {
+        //        jeKonec = false;
+        //    }
+        //}
         return jeKonec;
     }
 }
