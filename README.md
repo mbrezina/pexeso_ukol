@@ -8,6 +8,7 @@ CREATE TABLE NejlepsiHraci (
     PocetTahu INT NOT NULL  );
 
 
+Jak vyrobit hráče do tabulky nejlepších hráčů:
 INSERT INTO NejlepsiHraci (Jmeno, PocetTahu) VALUES ('NikiPiki', 23);
 
 
