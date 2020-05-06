@@ -1,7 +1,10 @@
 # pexeso_ukol
 
+https://javabrno.czechitas.cz/2020-jaro/java-2/lekce10-ukol.html
 
-Jak si vyrobit tabulky pro tento program:
+Úkol implementuje 2 Repository: InMemoryRepository (větev memory_results) a JdbcRepository (větev homework). Nadstavbou nad úkolem je zobrazení tabulky s nejlepšími hráči a zapsání vlastního výsledku do této tabulky tak, aby pexeso vypadalo jako opravdová hra. Toto je uděláno pro obě implementace Repository.
+
+Jak si vyrobit tabulky pro tento program při práci s JdbcRepository, pokud chcete mít i tabulku s nejlepšími hráči:
 
 CREATE TABLE NejlepsiHraci (     
     Jmeno VARCHAR(250) NOT NULL,
