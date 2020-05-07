@@ -1,3 +1,9 @@
+CREATE TABLE NejlepsiHraci (     
+    Jmeno VARCHAR(250) NOT NULL,
+    PocetTahu INT NOT NULL  );
+
+
+INSERT INTO NejlepsiHraci (Jmeno, PocetTahu) VALUES ('NikiPiki', 23);
 
 
 
