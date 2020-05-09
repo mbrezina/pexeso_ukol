@@ -21,6 +21,7 @@ CREATE TABLE NejlepsiHraci (
 
 
 Jak vyrobit nějaké hráče do tabulky nejlepších hráčů:
+
 INSERT INTO NejlepsiHraci (Jmeno, PocetTahu) VALUES ('NikiPiki', 13);
 INSERT INTO NejlepsiHraci (Jmeno, PocetTahu) VALUES ('Junka', 29);
 INSERT INTO NejlepsiHraci (Jmeno, PocetTahu) VALUES ('Týna', 19);
